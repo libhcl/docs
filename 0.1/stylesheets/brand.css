@@ -1,0 +1,13 @@
+:root {
+  --md-primary-fg-color: #6D28D9;
+  --md-primary-fg-color--light: #A78BFA;
+  --md-primary-fg-color--dark: #5B21B6;
+  --md-accent-fg-color: #A78BFA;
+}
+.md-header, .md-tabs { background: linear-gradient(135deg, #A78BFA, #6D28D9); }
+.md-typeset h1 { color: #5B21B6; font-weight: 800; }
+[data-md-color-scheme="slate"] .md-typeset h1 { color: #A78BFA; }
+.fs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+.fs-card { display:flex; gap:12px; align-items:center; border:1px solid var(--md-default-fg-color--lightest);
+  border-radius:12px; padding:12px; }
+.fs-card img { width:42px; height:42px; }

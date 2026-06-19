@@ -1,0 +1,817 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="HCL parsers written in C — a tiny zero-dependency parser for the declarative HCL subset, and a from-scratch HCL2 expression engine. BSD-3, no third-party code.">
+      
+      
+      
+        <link rel="canonical" href="https://libhcl.github.io/docs/0.1/components/c-hcl2/">
+      
+      
+        <link rel="prev" href="../c-hcl/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/logo.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>c-hcl2 — HCL2 expression engine - libhcl</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/brand.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#c-hcl2-hcl2-expression-engine" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="libhcl" class="md-header__button md-logo" aria-label="libhcl" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            libhcl
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              c-hcl2 — HCL2 expression engine
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libhcl" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhcl
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="libhcl" class="md-nav__button md-logo" aria-label="libhcl" data-md-component="logo">
+      
+  <img src="../../assets/logo.svg" alt="logo">
+
+    </a>
+    libhcl
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libhcl" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhcl
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Components
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Components
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../c-hcl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    c-hcl — declarative-subset parser
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    c-hcl2 — HCL2 expression engine
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    c-hcl2 — HCL2 expression engine
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-works-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What works today
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build &amp; test
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap-deliberate-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap &amp; deliberate scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-works-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What works today
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#api-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API at a glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build &amp; test
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap-deliberate-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap &amp; deliberate scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="c-hcl2-hcl2-expression-engine">c-hcl2 — HCL2 expression engine</h1>
+<p><a href="https://github.com/libhcl/c-hcl2"><code>github.com/libhcl/c-hcl2</code></a> is a
+<strong>from-scratch C implementation of HCL2</strong> — the heavyweight companion to
+<a href="../c-hcl/">c-hcl</a>. Use <code>c-hcl</code> when you want a tiny config reader; reach for
+<code>c-hcl2</code> when you need the <strong>expression language</strong>: interpolation, arithmetic,
+conditionals, for-expressions, function calls.</p>
+<div class="admonition warning">
+<p class="admonition-title">Status: a work in progress — not yet spec-complete</p>
+<p>"Full HCL2" is a large language (the Go reference, <code>hashicorp/hcl</code> v2 +
+<code>zclconf/go-cty</code>, is tens of thousands of lines). <code>c-hcl2</code> is built
+<strong>milestone by milestone</strong> and is honest about being in progress. The
+implemented surface is broad — the milestone breakdown and the remaining
+gaps to 100% native-syntax compatibility are tracked in <code>ROADMAP.md</code> in the
+repository.</p>
+</div>
+<h2 id="what-works-today">What works today</h2>
+<p><strong>Expressions</strong> (<code>hcl2_eval</code>):</p>
+<ul>
+<li>numbers, booleans, <code>null</code>; quoted-string <strong>templates</strong> with <code>${ expr }</code>
+  interpolation (and <code>$${</code> escape)</li>
+<li>tuples <code>[...]</code>, objects <code>{ k = v, ... }</code> (ident or string keys, <code>=</code> or <code>:</code>)</li>
+<li>unary <code>- !</code>; binary <code>+ - * / %</code>; comparison <code>== != &lt; &lt;= &gt; &gt;=</code>; logical
+  <code>&amp;&amp; ||</code>; the conditional <code>cond ? a : b</code>; parentheses</li>
+<li>variable references with <code>.attr</code> / <code>[index]</code> traversal; function calls</li>
+<li><strong>for-expressions</strong> — <code>[for x in xs : x*2 if x&gt;0]</code>, <code>{for k, v in m : k =&gt; v}</code>
+  (including object grouping mode)</li>
+<li><strong>splat</strong> — <code>xs[*].name</code> (desugars to a for-expression; captures the trailing
+  <code>.attr</code>/<code>[index]</code> traversal)</li>
+<li><strong>heredocs</strong> — <code>&lt;&lt;EOF</code> and indented <code>&lt;&lt;-EOF</code> (common-leading-whitespace strip);
+  the body is a template</li>
+<li><strong>template directives</strong> — <code>%{ if }</code>/<code>%{ else }</code>/<code>%{ endif }</code>,
+  <code>%{ for }</code>/<code>%{ endfor }</code> (nestable; <code>%%{</code> escape), plus whitespace trimming
+  <code>${~ ~}</code> / <code>%{~ ~}</code></li>
+<li><strong>variadic spread</strong> — <code>max(xs...)</code> expands a tuple as trailing arguments</li>
+</ul>
+<p>The standard library of builtins: <code>length</code>, <code>upper</code>, <code>lower</code>, <code>min</code>, <code>max</code>,
+<code>abs</code>, <code>floor</code>, <code>ceil</code>, <code>join</code>, <code>split</code>, <code>concat</code>, <code>keys</code>, <code>values</code>,
+<code>contains</code>, <code>lookup</code>, <code>coalesce</code>, <code>tostring</code>, <code>tonumber</code>, <code>tobool</code>,
+<code>jsonencode</code>, <code>jsondecode</code>, plus the lazy special forms <code>try(...)</code> and
+<code>can(...)</code> for graceful optional access.</p>
+<p><strong>Configuration bodies</strong> (<code>hcl2_parse</code>) — documents of attributes
+(<code>name = expr</code>) and nested, optionally labeled blocks (<code>type "label" { ... }</code>),
+with <code>#</code> / <code>//</code> / <code>/* */</code> comments. Attribute expressions decode <strong>lazily</strong>
+against a context (<code>hcl2_body_attr_value</code>), and c-hcl-style accessors
+(<code>hcl2_doc_root</code>, <code>hcl2_body_block_count</code>/<code>_at</code>, <code>hcl2_block_type</code>/<code>_label</code>/
+<code>_body</code>) let <code>c-hcl2</code> subsume <a href="../c-hcl/">c-hcl</a>.</p>
+<p><strong>Value model</strong> — a cty-lite model with distinct collection kinds: tuple/object
+plus real <code>HCL2_LIST</code> / <code>HCL2_SET</code> / <code>HCL2_MAP</code> (a list is not equal to a tuple,
+a map not to an object). A <strong>type-constraint / conversion</strong> layer
+(<code>hcl2_type_*</code> + <code>hcl2_convert</code>) coerces values toward a target type
+(primitive coercions and <code>list</code>/<code>set</code>/<code>map</code>/<code>any</code> constraints).</p>
+<p><strong>Unknown values</strong> (<code>hcl2_unknown</code>, <code>HCL2_UNKNOWN</code>) model cty's plan-time
+placeholders: any operation touching an unknown — arithmetic, comparison,
+conditionals, traversal, calls, for-expressions, template interpolation /
+directives — propagates unknown. Unknowns can carry their cty type
+(<code>hcl2_unknown_of</code> / <code>hcl2_unknown_type</code>), and <code>hcl2_convert</code> refines them.</p>
+<p><strong>JSON profile</strong> — implemented end to end: <code>hcl2_parse_json</code> (value layer),
+<code>hcl2_json_eval</code> (each JSON string as an HCL template), and <code>hcl2_json_decode</code>
++ <code>hcl2_schema_*</code> (schema-driven body layer decoding into the same
+<code>hcl2_doc</code>/<code>hcl2_body</code> tree the native parser builds).</p>
+<p><strong>Diagnostics</strong> — both syntax and semantic/eval errors report <code>at line L,
+column C</code> (AST nodes carry positions, so errors are located even for deferred
+body decoding after the source buffer is gone). <code>hcl2_parse_diags</code> recovers at
+the next line and gathers all body-level errors into a <code>hcl2_diags</code> list.</p>
+<h2 id="api-at-a-glance">API at a glance</h2>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;hcl2.h&quot;</span>
+
+<span class="n">hcl2_ctx</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_ctx_new</span><span class="p">();</span>
+<span class="n">hcl2_ctx_set_var</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;port&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hcl2_number</span><span class="p">(</span><span class="mi">8080</span><span class="p">));</span>
+<span class="n">hcl2_ctx_set_var</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hcl2_string</span><span class="p">(</span><span class="s">&quot;api&quot;</span><span class="p">));</span>
+
+<span class="kt">char</span><span class="w"> </span><span class="n">err</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="n">hcl2_value</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_eval</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">${name}:${port + 1}</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="cm">/*=strlen*/</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span>
+<span class="w">                          </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="c1">// v == &quot;api:8081&quot;</span>
+
+<span class="n">hcl2_value_free</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="n">hcl2_ctx_free</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</code></pre></div>
+<p>Bodies decode lazily against a context:</p>
+<div class="highlight"><pre><span></span><code><span class="n">hcl2_doc</span><span class="w"> </span><span class="o">*</span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_parse</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">hcl2_body</span><span class="w"> </span><span class="o">*</span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_doc_root</span><span class="p">(</span><span class="n">doc</span><span class="p">);</span>
+<span class="n">hcl2_value</span><span class="w"> </span><span class="o">*</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_body_attr_value</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;port&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">hcl2_block</span><span class="w"> </span><span class="o">*</span><span class="n">svc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_body_block_at</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;service&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+<p>See <code>hcl2.h</code> for the full value/context API and <code>GRAMMAR.md</code> for the lexical
+tokens, EBNF (expressions and bodies), the Pratt precedence table, and the
+template rules.</p>
+<h2 id="build-test">Build &amp; test</h2>
+<p>The <code>Makefile</code> builds <code>libhcl2.a</code> from nine translation units
+(<code>value.c lexer.c parser.c eval.c body.c convert.c json.c json_body.c
+builtins.c</code>) and links <code>-lm</code> for the math builtins:</p>
+<div class="highlight"><pre><span></span><code>make<span class="w">            </span><span class="c1"># builds libhcl2.a</span>
+make<span class="w"> </span><span class="nb">test</span><span class="w">       </span><span class="c1"># unit tests (add SANITIZE=address on a system clang)</span>
+make<span class="w"> </span>cover<span class="w">      </span><span class="c1"># llvm-cov report</span>
+make<span class="w"> </span>fuzz<span class="w">       </span><span class="c1"># deterministic fixed-seed fuzzing of the lexer/parser</span>
+</code></pre></div>
+<p>No toolchain? With <a href="https://pkgx.sh">pkgx</a>: <code>dev</code> (reads <code>pkgx.yaml</code>) or
+<code>./taskw test</code>.</p>
+<p>Testing is under AddressSanitizer with <strong>allocation fault-injection</strong>
+(<code>HCL2_FAULT_INJECT</code> budget hook + an OOM-scan harness) and <strong>fuzzing</strong>
+(random / token-soup / seed-mutation inputs, exact-length buffers so ASan
+catches over-reads, clean over millions of iterations). Coverage is <strong>100% of
+functions</strong> and ~99% of lines.</p>
+<h2 id="roadmap-deliberate-scope">Roadmap &amp; deliberate scope</h2>
+<p>The <code>ROADMAP.md</code> tracks status honestly. Highlights of what is <strong>done</strong>: the
+expression engine (M1), configuration bodies (M2), template &amp; collection
+expressions (M3), most of the type system &amp; multi-error diagnostics (M4), and
+the full JSON profile (M5). Known <strong>remaining</strong> items are refinements rather
+than missing features:</p>
+<ul>
+<li>full source <strong>ranges</strong> (start+end spans, currently a start point only)</li>
+<li>eval-level result-type <strong>inference</strong> onto operation-produced unknowns</li>
+<li>chained splats (<code>xs[*][*]</code>), rejected today with a clear error</li>
+</ul>
+<p>One <strong>deliberate scope decision</strong>: numbers are IEEE-754 <code>double</code>, not cty's
+arbitrary-precision <code>big.Float</code>. A <code>double</code> carries ~15–17 significant decimal
+digits — ample for configuration values (ports, counts, ratios, timeouts) — and
+keeps the value model dependency-free. Programs needing exact arithmetic on very
+large integers or high-precision fractions are out of scope; revisiting this
+would mean a bignum dependency, which conflicts with the zero-dependency goal.</p>
+<h2 id="license">License</h2>
+<p>BSD-3-Clause.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
