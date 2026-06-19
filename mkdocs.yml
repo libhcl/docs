@@ -1,0 +1,43 @@
+site_name: libhcl
+site_description: HCL parsers written in C — a tiny zero-dependency parser for the declarative HCL subset, and a from-scratch HCL2 expression engine. BSD-3, no third-party code.
+site_url: https://libhcl.github.io/docs/
+repo_url: https://github.com/libhcl
+repo_name: libhcl
+edit_uri: ""
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle: { icon: material/weather-night, name: Dark mode }
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle: { icon: material/weather-sunny, name: Light mode }
+  features: [navigation.sections, navigation.top, content.code.copy, search.suggest]
+
+extra_css: [stylesheets/brand.css]
+extra:
+  version:
+    provider: mike
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - pymdownx.highlight
+
+nav:
+  - Home: index.md
+  - Components:
+      - Overview: components/index.md
+      - "c-hcl — declarative-subset parser": components/c-hcl.md
+      - "c-hcl2 — HCL2 expression engine": components/c-hcl2.md
