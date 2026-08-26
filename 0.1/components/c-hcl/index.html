@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/logo.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -655,48 +655,48 @@ third-party code — and easy to embed in any C project. It was extracted from
 <a href="https://github.com/lima-vm/socket_vmnet">socket_vmnet</a>.</p>
 <h2 id="the-grammar-it-parses">The grammar it parses</h2>
 <div class="highlight"><pre><span></span><code>body   := ( attr | block )*
-attr   := IDENT &#39;=&#39; value
-block  := IDENT label* &#39;{&#39; body &#39;}&#39;
+attr   := IDENT '=' value
+block  := IDENT label* '{' body '}'
 label  := STRING | IDENT
-value  := STRING | NUMBER | &#39;true&#39; | &#39;false&#39; | &#39;null&#39;
-        | &#39;[&#39; ( value ( &#39;,&#39; value )* &#39;,&#39;? )? &#39;]&#39;
+value  := STRING | NUMBER | 'true' | 'false' | 'null'
+        | '[' ( value ( ',' value )* ','? )? ']'
 </code></pre></div>
 <p>Comments are <code>#</code>, <code>//</code> (to end of line) and <code>/* ... */</code>. The full lexical
 tokens, EBNF, and parsing strategy live in <code>GRAMMAR.md</code> in the repository.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># example.hcl</span>
-<span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;demo&quot;</span>
+<span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">"demo"</span>
 <span class="na">replicas</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span>
-<span class="na">tags</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;web&quot;, &quot;edge&quot;</span><span class="p">]</span>
+<span class="na">tags</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s2">"web", "edge"</span><span class="p">]</span>
 
-<span class="err">service</span><span class="w"> </span><span class="s2">&quot;api&quot; &quot;primary&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="err">service</span><span class="w"> </span><span class="s2">"api" "primary"</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="na">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8080</span>
-<span class="w">  </span><span class="nb">upstream</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;10.0.0.1&quot;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">upstream</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="na">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"10.0.0.1"</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <h2 id="the-api">The API</h2>
 <p>Parse once into an immutable AST, walk it with accessors, then free.</p>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;hcl.h&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"hcl.h"</span>
 
 <span class="kt">char</span><span class="w"> </span><span class="n">err</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
 <span class="n">hcl_doc</span><span class="w"> </span><span class="o">*</span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_parse</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
-<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">doc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="k">const</span><span class="w"> </span><span class="n">hcl_body</span><span class="w"> </span><span class="o">*</span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_doc_root</span><span class="p">(</span><span class="n">doc</span><span class="p">);</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">hcl_value</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">);</span>
-<span class="n">puts</span><span class="p">(</span><span class="n">hcl_value_string</span><span class="p">(</span><span class="n">name</span><span class="p">));</span><span class="w">                            </span><span class="c1">// &quot;demo&quot;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">hcl_value</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"name"</span><span class="p">);</span>
+<span class="n">puts</span><span class="p">(</span><span class="n">hcl_value_string</span><span class="p">(</span><span class="n">name</span><span class="p">));</span><span class="w">                            </span><span class="c1">// "demo"</span>
 
 <span class="kt">double</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
-<span class="n">hcl_value_number</span><span class="p">(</span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;replicas&quot;</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span><span class="w">   </span><span class="c1">// 3</span>
+<span class="n">hcl_value_number</span><span class="p">(</span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"replicas"</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span><span class="w">   </span><span class="c1">// 3</span>
 
-<span class="k">const</span><span class="w"> </span><span class="n">hcl_value</span><span class="w"> </span><span class="o">*</span><span class="n">tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tags&quot;</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">hcl_value</span><span class="w"> </span><span class="o">*</span><span class="n">tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"tags"</span><span class="p">);</span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">hcl_value_list_count</span><span class="p">(</span><span class="n">tags</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
 <span class="w">  </span><span class="n">puts</span><span class="p">(</span><span class="n">hcl_value_string</span><span class="p">(</span><span class="n">hcl_value_list_at</span><span class="p">(</span><span class="n">tags</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">)));</span>
 
-<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">hcl_body_block_count</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;service&quot;</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">hcl_block</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_block_at</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;service&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">label</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_block_label</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">            </span><span class="c1">// &quot;api&quot;</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">hcl_value</span><span class="w"> </span><span class="o">*</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">hcl_block_body</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;port&quot;</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">hcl_body_block_count</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"service"</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">hcl_block</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_block_at</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"service"</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">label</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_block_label</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">            </span><span class="c1">// "api"</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">hcl_value</span><span class="w"> </span><span class="o">*</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl_body_attr</span><span class="p">(</span><span class="n">hcl_block_body</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="w"> </span><span class="s">"port"</span><span class="p">);</span>
 <span class="w">  </span><span class="c1">// ...</span>
 <span class="p">}</span>
 
@@ -815,7 +815,7 @@ functions and ~99% of lines</strong> — the remainder being defensive <code>NUL
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

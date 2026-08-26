@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/logo.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -694,16 +694,16 @@ column C</code> (AST nodes carry positions, so errors are located even for defer
 body decoding after the source buffer is gone). <code>hcl2_parse_diags</code> recovers at
 the next line and gathers all body-level errors into a <code>hcl2_diags</code> list.</p>
 <h2 id="api-at-a-glance">API at a glance</h2>
-<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;hcl2.h&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"hcl2.h"</span>
 
 <span class="n">hcl2_ctx</span><span class="w"> </span><span class="o">*</span><span class="n">ctx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_ctx_new</span><span class="p">();</span>
-<span class="n">hcl2_ctx_set_var</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;port&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hcl2_number</span><span class="p">(</span><span class="mi">8080</span><span class="p">));</span>
-<span class="n">hcl2_ctx_set_var</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">hcl2_string</span><span class="p">(</span><span class="s">&quot;api&quot;</span><span class="p">));</span>
+<span class="n">hcl2_ctx_set_var</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">"port"</span><span class="p">,</span><span class="w"> </span><span class="n">hcl2_number</span><span class="p">(</span><span class="mi">8080</span><span class="p">));</span>
+<span class="n">hcl2_ctx_set_var</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">"name"</span><span class="p">,</span><span class="w"> </span><span class="n">hcl2_string</span><span class="p">(</span><span class="s">"api"</span><span class="p">));</span>
 
 <span class="kt">char</span><span class="w"> </span><span class="n">err</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
-<span class="n">hcl2_value</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_eval</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">${name}:${port + 1}</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="cm">/*=strlen*/</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span>
+<span class="n">hcl2_value</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_eval</span><span class="p">(</span><span class="s">"</span><span class="se">\"</span><span class="s">${name}:${port + 1}</span><span class="se">\"</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="cm">/*=strlen*/</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span>
 <span class="w">                          </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
-<span class="c1">// v == &quot;api:8081&quot;</span>
+<span class="c1">// v == "api:8081"</span>
 
 <span class="n">hcl2_value_free</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
 <span class="n">hcl2_ctx_free</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
@@ -711,8 +711,8 @@ the next line and gathers all body-level errors into a <code>hcl2_diags</code> l
 <p>Bodies decode lazily against a context:</p>
 <div class="highlight"><pre><span></span><code><span class="n">hcl2_doc</span><span class="w"> </span><span class="o">*</span><span class="n">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_parse</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
 <span class="k">const</span><span class="w"> </span><span class="n">hcl2_body</span><span class="w"> </span><span class="o">*</span><span class="n">root</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_doc_root</span><span class="p">(</span><span class="n">doc</span><span class="p">);</span>
-<span class="n">hcl2_value</span><span class="w"> </span><span class="o">*</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_body_attr_value</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;port&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
-<span class="k">const</span><span class="w"> </span><span class="n">hcl2_block</span><span class="w"> </span><span class="o">*</span><span class="n">svc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_body_block_at</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;service&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">hcl2_value</span><span class="w"> </span><span class="o">*</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_body_attr_value</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"port"</span><span class="p">,</span><span class="w"> </span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">err</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">hcl2_block</span><span class="w"> </span><span class="o">*</span><span class="n">svc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hcl2_body_block_at</span><span class="p">(</span><span class="n">root</span><span class="p">,</span><span class="w"> </span><span class="s">"service"</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
 </code></pre></div>
 <p>See <code>hcl2.h</code> for the full value/context API and <code>GRAMMAR.md</code> for the lexical
 tokens, EBNF (expressions and bodies), the Pratt precedence table, and the
@@ -810,7 +810,7 @@ would mean a bignum dependency, which conflicts with the zero-dependency goal.</
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
